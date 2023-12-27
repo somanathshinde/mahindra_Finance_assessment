@@ -1,0 +1,200 @@
+Somanath shinde
+
+Question: "Develop a robust test automation script to thoroughly validate the login functionality and password recovery feature of a web application's login page. Assume that the login page contains two input fields for username and password, a 'Login' button, and a 'Forgot Password' link. The script should cover the following test cases:
+1. Verify that a user with valid credentials can successfully log in and access the system.
+Webdrivermanager.chromedriver().setup();
+WebDriver driver = new chromedriver();
+driver.get(---path-----);
+WebElement useremail = driver.findElement(By.xpath("//input[@placeholder='Email']"));
+
+    WebElement password = driver.findElement(By.xpath("//input[@placeholder='Password']"));
+
+    WebElement login = driver.findElement(By.xpath("//a[@class='btn-signin']"));
+
+    useremail.sendKeys("somanathshinde@gmail.com"); password.sendKeys("XXX");
+    login.click(); 
+    String actualurl="url";
+    String expectedurl= driver.getCurrentUrl();
+    Assert.assertEquals(expectedurl,actualurl);
+
+2. Validate that an error message is displayed when attempting to log in with invalid credentials.
+ new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='wpName']"))).sendKeys("ss@gmail.com");
+driver.findElement(By.cssSelector("input[name='wpPassword']")).sendKeys("xyz");
+        driver.findElement(By.cssSelector("button#wpLoginAttempt")).click();
+        try
+        {
+            new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("xyz")));
+            System.out.println("Unsuccessful login attempt");
+        }
+        catch (TimeoutException e)
+        {
+            System.out.println("Successful Login.");
+        }
+        driver.quit();
+    }
+
+3. Ensure that the login page retains the entered username and password fields' values after a failed login attempt.
+4. Test that the 'Login' button is disabled when both username and password fields are empty.
+boolean actualEmptyLoginButton = 
+driver.findElement(By.cssSelector(".loginButtonMain")).isEnabled();
+Assert.assertTrue(actualEmptyLoginButton, "Login Button is not displayed");
+
+String actualEmptyLoginTitle = driver.getTitle();
+Assert.assertEquals("Login | Tu clothing", actualEmptyLoginTitle);
+
+
+5. Confirm that the 'Login' button is enabled only when both username and password fields are filled with valid input.
+6. Verify that clicking the 'Forgot Password' link redirects the user to the password recovery page.
+public class ReadEmail 
+{
+    static String hostName ="imap.1and1.com";
+    static  String username = "";
+    static String password = "";
+    static int messageCount;
+    public static String url=null;
+    public static String userid = null;
+    public static String pass=null;
+
+    //public static void showEmail()
+    public static void main(String ar[])
+    {
+        Properties sysProps = System.getProperties();
+        sysProps.setProperty("mail.store.protocol", "imap");
+
+        try 
+        {
+                Session session = Session.getInstance(sysProps, null);      
+                Store store = session.getStore();       
+                store.connect(hostName, username, password);        
+                Folder emailInbox = store.getFolder("INBOX");       
+                emailInbox.open(Folder.READ_WRITE);     
+                messageCount = emailInbox.getMessageCount();        
+                System.out.println("Total Message Count: " + messageCount);     
+                int unreadMsgCount = emailInbox.getNewMessageCount();       
+                System.out.println("Unread Emails count:"+unreadMsgCount);
+                Message emailMessage = emailInbox.getMessage(messageCount); 
+                System.out.println("Email Subject: " + emailMessage.getSubject());  
+                Multipart multipart = (Multipart) emailMessage.getContent();
+                BodyPart part = multipart.getBodyPart(0);                   
+                String responseMessage = part.getContent().toString();
+
+
+                    System.out.println("================"+responseMessage);
+
+                    // Get Email ID
+                    Pattern p = Pattern.compile("EmailId:   (.+)");
+                    Matcher m = p.matcher(responseMessage);             
+                    if (m.find()) {
+                        userid = m.group(1);
+                    }
+                    System.out.println(userid);
+
+
+
+                    /*Get URL*/
+                    Pattern p2 = Pattern.compile("http(.+)");
+                    Matcher m2 = p2.matcher(responseMessage);
+
+                    if (m2.find()) {
+                        url = m2.group();  
+                    }
+                    System.out.println("URL  :="+ url);
+
+                    /*Get password from email*/
+                    Pattern p1 = Pattern.compile("Password:     (.*)");
+                    Matcher m1 = p1.matcher(responseMessage);
+
+                    if (m1.find()) {
+                        pass = m1.group(1);  
+                    }
+                    System.out.println(pass);
+
+                    /*System.out.println("Email Content: " + emailMessage.getContent().toString());
+
+                    Pattern p = Pattern.compile("<td>Password:<.*?td>([^<]+)<td>(.+)<.*?td>");
+                    Matcher m = p.matcher(responseMessage);
+
+                    if (m.find()) {
+                        password1 = m.group(1); // this variable should contain the link URL
+                    }*/
+
+                emailMessage.setFlag(Flags.Flag.SEEN, true);        
+                emailInbox.close(true);
+                store.close();          
+
+        }
+        catch (Exception mex) 
+        {
+            mex.printStackTrace();
+        }
+        //return new ReadEmail();
+
+
+    }
+}
+
+7. Validate the password recovery functionality by following these steps:
+    a. Click the 'Forgot Password' link.
+driver.findelement(By.xpath(--path---)).click();
+    b. Enter a registered email address in the provided field.
+driver.findelement(By.xpath(--path---)).Sendkeys("somanathshinde@gmail.com");
+    c. Click the 'Recover Password' button.
+driver.findelement(By.xpath(--path---)).click();
+    d. Verify that a success message is displayed indicating that an email with password recovery instructions has been sent.
+driver.findelement(By.xpath(--path---)).getText();
+    e. Simulate the password recovery process by accessing the provided email or using a test email account.
+ WebElement nameInput = registrationDriver.findElement(By.id("name"));
+        nameInput.sendKeys("Maria Williams");
+
+        WebElement emailInput = registrationDriver.findElement(By.id("email"));
+        emailInput.sendKeys(emailAddress);
+
+        // a random password to fill out the registration form
+        String password = "J#Vq6KB9#dCstNQ5ZChz";
+
+        WebElement passwordInput = registrationDriver.findElement(By.id("password"));
+        passwordInput.sendKeys(password);
+
+        WebElement repeatPasswordInput = registrationDriver.findElement(By.id("re_password"));
+        repeatPasswordInput.sendKeys(password);
+
+        WebElement submitButton = registrationDriver.findElement(By.id("signup"));
+        // submitting the form
+        submitButton.click();
+
+    f. Retrieve the recovery instructions and follow the specified steps to reset the password.
+    g. Ensure that after successfully resetting the password, the user is redirected to the login page.
+barcode = "11111111"
+driver.implicitly_wait(5)
+driver.find_element_by_id("Clear").click()
+driver.find_element_by_id("SpecimenParam").send_keys(barcode)
+driver.find_element_by_id("Find").click()
+
+driver.quit()
+
+    h. Validate that the user can log in with the new password.
+String newUrl = driver.getCurrentUrl();
+
+if(newUrl.equalsIgnoreCase("expected_URL")){
+    System.out.println("Login Success");
+}
+else {
+    // your further action 
+}
+String usename = driver.findElement(By.yourLocater).getText();
+    try {
+     if(usename.equalsIgnoreCase("expected username")) {
+          // success message
+      }
+     else {
+        // your further actions
+     }
+   }
+    catch(Exception e) {
+        System.out.println(e);
+    }
+assertEquals(newUrl, driver.getCurrentUrl());
+
+Please provide a well-structured test automation script in your preferred programming language, detailing the necessary steps and assertions to validate the mentioned test cases for the login page and password recovery feature."
+
+
